@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cronometro metralleta</title>
+    <style>
+        body {
+            text-align: center;
+        }
+
+        #cronometro {
+            font-size: 50px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        button {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+<div id="cronometro">
+    <span id="minutos">00</span><span>:</span><span id="segundos">00</span>
+</div>
+<button id="comenzar">Comenzar</button>
+<button id="Parar">Parar</button>
+<button id="Resetear">Resetear</button>
+
+<script>
+    let intervalid = null;
+    let timeoutid = null;
+
+    function actualizarSegundos() {
+        let segundos = document.getElementById("segundos");
+        let segundosActuales = parseInt(segundos.innerHTML);
+        segundosActuales++;
+        if (segundosActuales < 10) {
+            segundos.textContent = "0" + segundosActuales;
+        } else {
+            segundos.textContent = segundosActuales;
+        }
+    }
+
+    function actualizarMinutos() {
+        let minutos = document.getElementById("minutos");
+        let segundos = document.getElementById("segundos")
+        let minutosActuales = parseInt(minutos.innerHTML);
+        let segundosActuales = parseInt(segundos.innerHTML);
+        minutosActuales++;
+        if (segundosActuales >= 60) {
+            minutosActuales++;
+            segundosActuales = 0;
+            segundos.textContent = '0' + segundosActuales;
+        }
+        if (minutosActuales < 10) {
+            minutos.textContent = '0' + minutosActuales;
+        } else {
+            minutos.textContent = minutosActuales;
+        }
+    }
+
+    function startTime() {
+        if (intervalid === null) {
+            intervalid = setInterval(actualizarSegundos, 1000);
+            timeoutid = setTimeout(actualizarMinutos, 60000);
+        }
+    }
+
+    function stoptime() {
+        if (intervalid != null) {
+            clearInterval(intervalid);
+            clearTimeout(timeoutid);
+            intervalid = null;
+        }
+    }
+
+    function resetTime() {
+        stoptime();
+        document.getElementById("segundos").textContent = `00`;
+        document.getElementById("minutos").textContent = '00';
+    }
+
+    document.getElementById("comenzar").addEventListener("click", startTime);
+    document.getElementById("Parar").addEventListener("click", stoptime);
+    document.getElementById("Resetear").addEventListener("click", resetTime);
+</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EL juego de piedra papel o tijera</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .options {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .options img {
+            cursor: pointer;
+            width: 100px;
+            height: 100px;
+        }
+
+        #result {
+            font-size: 24px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+<h1>Piedra, Papel o Tijera</h1>
+<div class="options">
+    <button onclick="playGame('piedra')">Piedra</button>
+    <button onclick="playGame('papel')">Papel</button>
+    <button onclick="playGame('tijera')">Tijera</button>
+</div>
+<div id="result"></div>
+
+<script>
+    function playGame(playerChoice) {
+        const options = ['piedra', 'papel', 'tijera'];
+        const randomIndex = Math.floor(Math.random() * options.length);
+        const machineChoice = options[randomIndex];
+
+        if (playerChoice === machineChoice) {
+            document.getElementById('result').textContent = `¡Empate! Has elegido ${playerChoice} y la máquina también.`;
+        } else if (
+            (playerChoice === 'piedra' && machineChoice === 'tijera') ||
+            (playerChoice === 'papel' && machineChoice === 'piedra') ||
+            (playerChoice === 'tijera' && machineChoice === 'papel')
+        ) {
+            document.getElementById('result').textContent = `¡Felicidades! Has elegido ${playerChoice} y la máquina eligió ${machineChoice}.`;
+        } else {
+            document.getElementById('result').textContent = `Lo siento, pero la máquina eligió ${machineChoice} y has perdido contra ella.`;
+        }
+    }
+</script>
+</body>
+</html>

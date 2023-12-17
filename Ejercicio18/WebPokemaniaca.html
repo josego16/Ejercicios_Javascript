@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Pokemaniaca</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .pokemon-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            padding: 1rem;
+        }
+
+        .pokemon-card {
+            background-color: #f1f1f1;
+            border-radius: 5px;
+            padding: 1rem;
+            width: 200px;
+        }
+
+        .pokemon-card img {
+            width: 100%;
+            height: auto;
+        }
+
+        .pokemon-card h3 {
+            margin: 0.5rem 0;
+        }
+
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        button:disabled {
+            background-color: #999;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Web Pokemaniaca</h1>
+</header>
+<div class="pokemon-container" id="pokemon-container">
+</div>
+<div class="pagination-container" id="pagination-container">
+    <button id="previous-page" onclick="getPokemonList(currentPage - 1)">Anterior</button>
+    <button id="next-page" onclick="getPokemonList(currentPage + 1)">Siguiente</button>
+</div>
+<script>
+    const apiUrl = 'https://pokeapi.co/api/v2/pokemon';
+    let currentPage = 0;
+    let lastPage = false;
+
+    async function getPokemonList(page) {
+        if (page === 0) {
+            currentPage = page;
+            document.getElementById('previous-page').disabled = true;
+        } else {
+            currentPage = page;
+            document.getElementById('previous-page').disabled = false;
+        }
+
+        let limit = 20;
+        let offset = currentPage * limit;
+
+        const response = await fetch(`${apiUrl}?offset=${offset}&limit=${limit}`);
+        const data = await response.json();
+
+        renderPokemonList(data.results);
+
+        if (data.results.length < limit) {
+            lastPage = true;
+            document.getElementById('next-page').disabled = true;
+        } else {
+            lastPage = false;
+            document.getElementById('next-page').disabled = false;
+        }
+    }
+
+    async function getPokemonDetails(name) {
+        const response = await fetch(`${apiUrl}/${name}`);
+        return await response.json();
+    }
+
+    function renderPokemonList(pokemonList) {
+        const pokemonContainer = document.getElementById('pokemon-container');
+        pokemonContainer.innerHTML = '';
+
+        pokemonList.forEach(async (pokemon) => {
+            const details = await getPokemonDetails(pokemon.name);
+            const pokemonCard = document.createElement('div');
+            pokemonCard.classList.add('pokemon-card');
+            pokemonCard.innerHTML = `
+                   <img src="${details.sprites.front_default}" alt="${details.name}">
+                   <h3>${details.name}</h3>
+               `;
+            pokemonContainer.appendChild(pokemonCard);
+        });
+    }
+
+    getPokemonList(currentPage);
+</script>
+</body>
+</html>

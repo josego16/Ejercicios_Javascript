@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tablas cuadernillo Rubio</title>
+<body>
+<h1>Generador tablas de multiplicar</h1>
+<label for="num">Elige un número:</label>
+<select id="num" onchange="imprimirTabla()">
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7</option>
+    <option value="8">8</option>
+    <option value="9">9</option>
+    <option value="10">10</option>
+</select>
+<div id="resultado"></div>
+<script>
+    function imprimirTabla() {
+        const num = document.getElementById("num").value;
+        let tabla = "<h2>Tabla del " + num + "</h2><table>";
+        for (let i = 1; i <= 10; i++) {
+            tabla += "<tr><td>" + num + " x " + i + " = " + (num * i) + "</td></tr>";
+        }
+        tabla += "</table>";
+        document.getElementById("resultado").innerHTML = tabla;
+    }
+</script>
+</body>
+</html>
